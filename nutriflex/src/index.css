@@ -1,0 +1,50 @@
+@reference "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #f7f7f7;
+  --color-text: #0e0e0e;
+  --color-brand: #E02424;
+}
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f5f5f5 40%, #efefef 100%);
+  color: var(--color-text);
+}
+
+/* Utilidades leves */
+.sticky-cart-shadow { box-shadow: 0 10px 25px -10px rgba(0,0,0,0.35); }
+
+/* Base e componentes com Tailwind v4 */
+@layer base {
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+  }
+  a { color: var(--color-brand); }
+}
+
+@layer components {
+  /* Removido: utilitários com @apply gerando erros no Tailwind v4 */
+}
+
+/* Letreiro de promoções (marquee) */
+.marquee { overflow: hidden; }
+.marquee-track {
+  display: inline-flex;
+  gap: 2rem;
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+  color: #000;
+  animation: marquee-scroll 18s linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
