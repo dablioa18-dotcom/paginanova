@@ -28,7 +28,7 @@ export default function CartDrawer({ open, onClose, items, setItems }) {
       notes,
       pickup,
       date: new Date().toISOString(),
-      total: items.reduce((acc, cur) => acc + cur.price, 0),
+          total: subtotal,
     };
     localStorage.setItem("nutriflex_last_order", JSON.stringify(order));
     clearCart();
@@ -38,7 +38,6 @@ export default function CartDrawer({ open, onClose, items, setItems }) {
 
   return (
     <div className={`fixed inset-0 z-40 ${open ? "pointer-events-auto" : "pointer-events-none"}`}>
-      {/* backdrop */}
       <div
         className={`absolute inset-0 bg-black/40 transition-opacity ${open ? "opacity-100" : "opacity-0"}`}
         onClick={onClose}
