@@ -1,5 +1,5 @@
 export default function HeroImageSection() {
-  const bg = "/imgSite/jonathan-borba-H6wTktsFxik-unsplash.jpg";
+  const bg = "/imgSite/academiabg.jpg";
   return (
     <section
       className="relative rounded-xl overflow-hidden shadow-soft"
@@ -15,12 +15,13 @@ export default function HeroImageSection() {
       <div className="relative z-10 px-6 sm:px-10 py-12 sm:py-20 text-white">
         <h2 className="text-2xl sm:text-4xl font-bold drop-shadow">Força, foco e desempenho</h2>
         <p className="mt-2 max-w-xl text-sm sm:text-base opacity-95">
-          Suplementos selecionados para potencializar seus treinos. Confira lançamentos e promoções.
+          Suplementos para potencializar seus treinos. Confira lançamentos e promoções.
         </p>
-        <div className="mt-6 flex gap-3">
-          <h3 href="#produtos" className="rounded-md bg-brand-red px-4 py-2 text-white text-sm">Ver produtos</h3>
-          <h3 href="#promocoes" className="rounded-md bg-white/20 px-4 py-2 text-white text-sm ;">Promoções</h3>
-        </div>
+        <p className=" uppercase mt-2 max-w-xl text-10 sm:text-base opacity-95">
+          Melhore seus resultados com suplementos de alta qualidade.
+          <br />
+          black friday o ano todo!
+        </p>
       </div>
     </section>
   );

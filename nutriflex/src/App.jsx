@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useState, lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import HeroImageSection from "./components/HeroImageSection";
 import BenefitsBar from "./components/BenefitsBar";
-import CategoryMenu from "./components/CategoryMenu";
 import ProductCard from "./components/ProductCard";
 import CartDrawer from "./components/CartDrawer";
 import WhatsAppButton from "./components/WhatsAppButton";
 import { products } from "./assets/data/products";
 const ProductPage = lazy(() => import("./pages/ProductPage"));
 const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
+const PaymentPage = lazy(() => import("./pages/PaymentPage"));
+const RastreioPage = lazy(() => import("./pages/RastreioPage"));
 import Footer from "./components/Footer";
 
-function Home({ onQuickBuy, query, setQuery }) {
+function Home({ onQuickBuy, query }) {
   const featured = useMemo(() => products.filter((p) => p.featured), []);
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -21,12 +22,7 @@ function Home({ onQuickBuy, query, setQuery }) {
       [p.name, p.category].some((field) => field.toLowerCase().includes(q))
     );
   }, [query]);
-
-  const [selectedCat, setSelectedCat] = useState(null);
-  const shown = useMemo(
-    () => (selectedCat ? filtered.filter((p) => p.category === selectedCat) : filtered),
-    [filtered, selectedCat]
-  );
+  const shown = useMemo(() => filtered, [filtered]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 space-y-6">
@@ -38,39 +34,36 @@ function Home({ onQuickBuy, query, setQuery }) {
       {/* Faixa de categorias estilo chips */}
       
 
-      <div className="grid sm:grid-cols-[240px_1fr] gap-6">
-        <CategoryMenu onSelect={setSelectedCat} />
+      <div className="space-y-4">
+        <section>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Destaques</h2>
+          </div>
+          <div className="mt-3 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {featured.map((p, i) => (
+              <ProductCard key={`feat-${p.id}-${i}`} product={p} onQuickBuy={onQuickBuy} />
+            ))}
+          </div>
+        </section>
 
-        <div className="space-y-4">
-          <section>
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Destaques</h2>
-            </div>
-            <div className="mt-3 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {featured.map((p, i) => (
-                <ProductCard key={`feat-${p.id}-${i}`} product={p} onQuickBuy={onQuickBuy} />
-              ))}
-            </div>
-          </section>
-
-          <section>
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Todos os produtos</h2>
-            </div>
-            <div className="mt-3 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {shown.map((p, i) => (
-                <ProductCard key={`all-${p.id}-${i}`} product={p} onQuickBuy={onQuickBuy} />
-              ))}
-            </div>
-          </section>
-        </div>
+        <section>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Todos os produtos</h2>
+          </div>
+          <div className="mt-3 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {shown.map((p, i) => (
+              <ProductCard key={`all-${p.id}-${i}`} product={p} onQuickBuy={onQuickBuy} />
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
 }
 
 function AppShell() {
-  const [query, setQuery] = useState("");
+  const { pathname } = useLocation();
+  const query = "";
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem("nutriflex_cart_items");
     return saved ? JSON.parse(saved) : [];
@@ -87,26 +80,29 @@ function AppShell() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-900">
-      <Header query={query} setQuery={setQuery} onOpenCart={() => setOpen(true)} />
+    <div className="min-h-screen bg-neutral-50 text-neutral-900 pt-28 sm:pt-32">
+      <Header onOpenCart={() => setOpen(true)} />
           <Suspense fallback={<div className="p-6">Carregando...</div>}>
             <Routes>
-              <Route path="/" element={<Home onQuickBuy={onQuickBuy} query={query} setQuery={setQuery} />} />
+              <Route path="/" element={<Home onQuickBuy={onQuickBuy} query={query} />} />
               <Route path="/product/:id" element={
                 <ProductPage onQuickBuy={onQuickBuy} />
                 } />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/rastreio" element={<RastreioPage />} />
             </Routes>
           </Suspense>
       <CartDrawer open={open} onClose={() => setOpen(false)} items={items} setItems={setItems} />
 
-      {/* Sticky cart button */}
-      <button
-        className="fixed bottom-4 right-4 rounded-full border border-red-500 bg-red-500 text-white px-4 py-3"
-        onClick={() => setOpen(true)}
-      >
-        Carrinho ({items.length})
-      </button>
+      {pathname !== "/checkout" && pathname !== "/payment" && (
+        <button
+          className="fixed bottom-4 right-4 rounded-full border border-red-500 bg-red-500 text-white px-4 py-3"
+          onClick={() => setOpen(true)}
+        >
+          Carrinho ({items.length})
+        </button>
+      )}
       
       <Footer />
     </div>

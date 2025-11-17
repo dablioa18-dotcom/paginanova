@@ -6,20 +6,26 @@ export default function ProductPage({ onQuickBuy }) {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
 
-  if (!product) return <div className="p-6">Produto não encontrado.</div>;
-
   const formatBRL = (val) =>
     typeof val === "number"
       ? val.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
       : val;
 
-  const initialWeight = product.id?.toLowerCase().includes("900g")
+  const initialWeight = product?.id?.toLowerCase().includes("900g")
     ? "900g"
-    : product.id?.toLowerCase().includes("1kg")
+    : product?.id?.toLowerCase().includes("1kg")
     ? "1kg"
     : "Único";
   const [weight, setWeight] = useState(initialWeight);
-  const [flavor, setFlavor] = useState(product.variants?.[0]?.id ?? "");
+  const [flavor, setFlavor] = useState(product?.variants?.[0]?.id ?? "");
+  const variantImg = useMemo(() => {
+    const v = product?.variants?.find((x) => x.id === flavor);
+    return (v && (v.image || (typeof v.images === "string" ? v.images : null))) || null;
+  }, [product, flavor]);
+
+  if (!product) {
+    return <div className="p-6">Produto não encontrado.</div>;
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
@@ -31,8 +37,7 @@ export default function ProductPage({ onQuickBuy }) {
         <span className="font-medium">{product.name}{product.brand ? ` - ${product.brand}` : ""}</span>
       </nav>
       <div className="grid sm:grid-cols-2 gap-6">
-        {/* Galeria de imagens */}
-        <Gallery product={product} />
+        <Gallery product={product} selectedVariantImage={variantImg} />
 
         <div>
           <h1 className="text-2xl font-bold">{product.name}</h1>
@@ -55,11 +60,10 @@ export default function ProductPage({ onQuickBuy }) {
               <span className="text-2xl font-bold text-brand-red">{formatBRL(product.price)}</span>
             )}
           </div>
-          <p className="mt-1 text-sm text-neutral-700">ou 4x de {formatBRL(product.price / 4)} sem juros</p>
+          <p className="mt-1 text-sm text-neutral-700">ou 5x de {formatBRL(product.price / 5)} sem juros</p>
 
-          {/* Seleção de variações (sabores) */}
           {product.variants?.length ? (
-            <VariantsSelector product={product} />
+            <VariantsSelector product={product} selected={flavor} setSelected={setFlavor} />
           ) : null}
 
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -104,14 +108,17 @@ export default function ProductPage({ onQuickBuy }) {
   );
 }
 
-function Gallery({ product }) {
-  const images = useMemo(() => (product.images?.length ? product.images : [product.image]), [product]);
+function Gallery({ product, selectedVariantImage }) {
+  const images = useMemo(() => {
+    const base = product.images?.length ? product.images : [product.image];
+    return (Array.isArray(base) ? base.filter((x) => !!x) : []).length ? base.filter((x) => !!x) : [product.image].filter((x) => !!x);
+  }, [product]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const main = images[activeIndex];
+  const main = selectedVariantImage || images[activeIndex];
 
   return (
-    <div>
-      <img src={main} alt={product.name} className="rounded-xl object-cover w-full h-72" />
+    <div className="group overflow-hidden">
+      <img src={main} alt={product.name} className="object-contain w-full h-auto max-h-80 rounded-none border-0 transition-transform duration-300 ease-out group-hover:scale-110 cursor-zoom-in" style={{ clipPath: "inset(0 0 0 1px)" }} />
       {images.length > 1 && (
         <div className="mt-3 grid grid-cols-4 gap-2">
           {images.map((src, i) => (
@@ -129,8 +136,7 @@ function Gallery({ product }) {
   );
 }
 
-function VariantsSelector({ product }) {
-  const [selected, setSelected] = useState(product.variants?.[0]?.id ?? null);
+function VariantsSelector({ product, selected, setSelected }) {
   return (
     <div className="mt-4">
       <p className="text-sm font-medium">Sabores</p>

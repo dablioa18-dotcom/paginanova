@@ -1,14 +1,16 @@
 export default function WhatsAppButton() {
-  const message = encodeURIComponent("Olá! Gostaria de saber mais sobre os suplementos da NutriFlex.");
-  const href = `https://wa.me/5500000000000?text=${message}`; // ajuste com seu número
+  const url = "https://wa.me/?text=Quero%20saber%20mais%20sobre%20os%20produtos%20da%20NutriFlex";
   return (
     <a
-      href={href}
+      href={url}
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-4 right-4 z-50 rounded-full bg-green-500 text-white shadow-lg px-4 py-3 font-semibold hover:opacity-90"
+      aria-label="Falar no WhatsApp"
+      className="fixed bottom-20 right-4 z-50 inline-flex items-center justify-center rounded-full bg-green-600 hover:bg-green-700 text-white shadow-lg h-12 w-12"
     >
-      WhatsApp
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
+        <path d="M20.52 3.48A11.82 11.82 0 0012.02 0C5.38 0 0 5.38 0 12.02c0 2.12.56 4.18 1.62 6.01L0 24l6.12-1.58a12 12 0 005.9 1.56h.01c6.64 0 12.02-5.38 12.02-12.02 0-3.21-1.25-6.23-3.55-8.48zm-8.5 18.23h-.01a9.98 9.98 0 01-5.1-1.4l-.37-.22-3.63.94.97-3.54-.24-.36a9.96 9.96 0 01-1.54-5.32c0-5.5 4.47-9.97 9.97-9.97 2.66 0 5.16 1.04 7.03 2.91a9.86 9.86 0 012.94 7.06c0 5.5-4.47 9.96-9.97 9.96zm5.46-7.45c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.95 1.16-.18.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.22-.24-.57-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37-.27.3-1.05 1.03-1.05 2.52 0 1.49 1.08 2.93 1.23 3.13.15.2 2.14 3.26 5.18 4.43.72.28 1.28.45 1.72.58.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.03-1.42.25-.7.25-1.3.18-1.42-.07-.12-.27-.2-.57-.35z" />
+      </svg>
     </a>
   );
 }

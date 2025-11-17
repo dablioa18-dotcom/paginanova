@@ -27,10 +27,7 @@ export default function BenefitsBar() {
     },
     {
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5">
-          <rect x="6" y="6" width="12" height="12" rx="3" ry="3" transform="rotate(45 12 12)" strokeWidth="2" />
-        <rect x="9" y="9" width="6" height="6" rx="2" transform="rotate( 45 12 12 )" strokeWidth="1" />
-        </svg>
+        <img src="/imgSite/pix.png" alt="" srcSet="" className="h-5 w-5" />
       ),
       text: "desconto de até 80% no pix",
     },
@@ -38,7 +35,7 @@ export default function BenefitsBar() {
 
   return (
     <section aria-label="Vantagens" className="mx-auto max-w-6xl">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
         {items.map((item) => (
           <div
             key={item.text}

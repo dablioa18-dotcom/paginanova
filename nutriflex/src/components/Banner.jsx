@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 export default function Banner() {
   return (
-    <motion.section
+    <Motion.section
       className="relative overflow-hidden rounded-xl bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white p-6 sm:p-10 shadow-lg"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -23,14 +23,14 @@ export default function Banner() {
           </button>
         </div>
       </div>
-      <motion.div
+      <Motion.div
         className="absolute -right-12 -bottom-12 hidden sm:block"
         initial={{ rotate: -10 }}
         animate={{ rotate: 0 }}
         transition={{ duration: 0.8 }}
       >
         <div className="h-40 w-40 rounded-full bg-white/10 border border-white/20" />
-      </motion.div>
-    </motion.section>
+      </Motion.div>
+    </Motion.section>
   );
 }
